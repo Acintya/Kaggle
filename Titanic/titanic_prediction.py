@@ -192,3 +192,73 @@ train_y=train['Survived']
 kf = KFold(n_splits=3,random_state=1)
 acc_lst = []
 ml(train_ft,train_y,'test_1')
+
+# testing 2, lose young
+train_ft_2=train.drop(['Survived','young'],axis=1)
+test_2 = test.drop('young',axis=1)
+train_ft.head()
+
+# ml
+kf = KFold(n_splits=3,random_state=1)
+acc_lst=[]
+ml(train_ft_2,train_y,'test_2')
+
+#test3, lose young, c
+train_ft_3=train.drop(['Survived','young','C'],axis=1)
+test_3 = test.drop(['young','C'],axis=1)
+train_ft.head()
+
+# ml
+kf = KFold(n_splits=3,random_state=1)
+acc_lst = []
+ml(train_ft_3,train_y,'test_3')
+
+# test4, no FARE
+train_ft_4=train.drop(['Survived','Fare'],axis=1)
+test_4 = test.drop(['Fare'],axis=1)
+train_ft.head()
+# ml
+kf = KFold(n_splits=3,random_state=1)
+acc_lst = []
+ml(train_ft_4,train_y,'test_4')
+
+# test5, get rid of c 
+train_ft_5=train.drop(['Survived','C'],axis=1)
+test_5 = test.drop('C',axis=1)
+
+# ml
+kf = KFold(n_splits=3,random_state=1)
+acc_lst = []
+ml(train_ft_5,train_y,'test_5')
+
+# test6, lose Fare and young
+train_ft_6=train.drop(['Survived','Fare','young'],axis=1)
+test_6 = test.drop(['Fare','young'],axis=1)
+train_ft.head()
+# ml
+kf = KFold(n_splits=3,random_state=1)
+acc_lst = []
+ml(train_ft_6,train_y,'test_6')
+
+accuracy_df=pd.DataFrame(data=accuracy,
+                         index=['test1','test2','test3','test4','test5','test6'],
+                         columns=['logistic','rf','svc','knn'])
+print(accuracy_df)
+
+'''
+According to the accuracy chart, 'features test4 with svc'
+got best performance
+'''  
+#test4 svc as submission
+svc = SVC()
+svc.fit(train_ft_4,train_y)
+svc_pred = svc.predict(test_4)
+print(svc.score(train_ft_4,train_y))
+
+
+test = pd.read_csv('test.csv')
+submission = pd.DataFrame({
+        "PassengerId": test["PassengerId"],
+        "Survived": svc_pred
+    })
+submission.to_csv("kaggle.csv", index=False)
