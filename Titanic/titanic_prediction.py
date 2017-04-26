@@ -4,6 +4,10 @@ Created on Wed Apr 26 23:27:29 2017
 
 @author: Ling
 """
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # import machine learning libraries
 from sklearn.linear_model import LogisticRegression
@@ -44,3 +48,11 @@ def ml(ft,target,time):
     feature["Coefficient Estimate"] = pd.Series(logreg.coef_[0])
     print(feature)
     return 
+
+# testing no.1, using all the feature
+train_ft=train.drop('Survived',axis=1)
+train_y=train['Survived']
+#set kf
+kf = KFold(n_splits=3,random_state=1)
+acc_lst = []
+ml(train_ft,train_y,'test_1')
