@@ -256,7 +256,7 @@ got best performance
 #svc_pred = svc.predict(test_4)
 #print(svc.score(train_ft_4,train_y))
 
-clf = svm.SVC(kernel = 'linear', C = 100).fit(train_ft_4, train_y)
+clf = svm.SVC(kernel = 'rbf', C = 100).fit(train_ft_4, train_y)
 svm_pred = clf.predict(test_4)
 
 test = pd.read_csv('test.csv')

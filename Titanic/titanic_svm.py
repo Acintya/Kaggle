@@ -126,7 +126,7 @@ for score in scores:
     print(classification_report(y_true, y_pred))
     print()
     
-clf = svm.SVC(kernel = 'linear', C = 100).fit(train_data, y)
+clf = svm.SVC(kernel = 'rbf', C = 1000, gamma = 0.001).fit(train_data, y)
 svm_pred = clf.predict(test_data)
 
 
