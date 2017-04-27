@@ -153,6 +153,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import cross_val_score, KFold
+from sklearn import svm
 
 def modeling(clf,ft,target):
     acc = cross_val_score(clf,ft,target,cv=kf)
@@ -250,15 +251,17 @@ According to the accuracy chart, 'features test4 with svc'
 got best performance
 '''  
 #test4 svc as submission
-svc = SVC()
-svc.fit(train_ft_4,train_y)
-svc_pred = svc.predict(test_4)
-print(svc.score(train_ft_4,train_y))
+#svc = SVC()
+#svc.fit(train_ft_4,train_y)
+#svc_pred = svc.predict(test_4)
+#print(svc.score(train_ft_4,train_y))
 
+clf = svm.SVC(kernel = 'linear', C = 100).fit(train_ft_4, train_y)
+svm_pred = clf.predict(test_4)
 
 test = pd.read_csv('test.csv')
 submission = pd.DataFrame({
         "PassengerId": test["PassengerId"],
-        "Survived": svc_pred
+        "Survived": svm_pred
     })
-submission.to_csv("kaggle.csv", index=False)
+submission.to_csv("kaggle_svm_2.csv", index=False)

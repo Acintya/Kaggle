@@ -11,6 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
+from sklearn import svm
 import pandas as pd
 import numpy as np
 
@@ -62,6 +63,8 @@ test_data['family'] = test_data['SibSp'] + test_data['Parch']
 
 train_data.drop(['SibSp','Parch'],axis=1,inplace=True)
 test_data.drop(['SibSp','Parch'],axis=1,inplace=True)
+
+test_data['Fare'].fillna(test_data['Fare'].median(),inplace=True)
 
 #according to the plot, smaller fare has higher survival rate, keep it
 #dealing the null val in test
@@ -122,3 +125,13 @@ for score in scores:
     y_true, y_pred = y_test, clf.predict(X_test)
     print(classification_report(y_true, y_pred))
     print()
+    
+clf = svm.SVC(kernel = 'linear', C = 100).fit(train_data, y)
+svm_pred = clf.predict(test_data)
+
+
+test = pd.read_csv('test.csv')
+submission = pd.DataFrame({
+        "PassengerId": test["PassengerId"],
+        "Survived": svm_pred})
+submission.to_csv("kaggle_svm.csv", index=False)
